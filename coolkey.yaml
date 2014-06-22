@@ -1,0 +1,60 @@
+Name        : coolkey
+Version     : 1.1.0
+Release     : 1
+Group       : System/Libraries
+License     : LGPLv2
+Summary     : CoolKey PKCS #11 module
+Description : |
+  Linux Driver support for the CoolKey and CAC products. 
+URL         : http://directory.fedora.redhat.com/wiki/CoolKey
+Sources     :
+    - "%{name}-%{version}.tar.gz"
+Patches:
+    - coolkey-cache-dir-move.patch
+    - coolkey-gcc43.patch
+    - coolkey-latest.patch
+    - coolkey-simple-bugs.patch
+    - coolkey-thread-fix.patch
+    - coolkey-cac.patch
+    - coolkey-cac-1.patch
+    - coolkey-pcsc-lite-fix.patch
+    - coolkey-fix-token-removal-failure.patch
+SetupOptions: -q
+
+PkgBR:
+    - autoconf
+    - pcsc-lite-devel
+PkgConfigBR:
+    - zlib
+    - nss
+
+Requires:
+    - nss-tools
+    - pcsc-lite
+    - ccid
+
+Configure: configure
+ConfigOptions:
+    - --with-debug
+    - --disable-dependency-tracking
+    - --enable-pk11install
+Builder: none
+
+Files:
+    - "%doc ChangeLog LICENSE "
+    - "%{_bindir}/pk11install"
+    - "%{_libdir}/libcoolkeypk11.so"
+    - "%{_libdir}/pkcs11"
+    - "%{_libdir}/libckyapplet.so.1"
+    - "%{_libdir}/libckyapplet.so.1.0.0"
+
+SubPackages:
+    - Name: devel
+      Summary: CoolKey Applet libraries
+      Group: System/Libraries
+      Description: |
+        Linux Driver support to access the CoolKey applet.
+      Files:
+          - "%{_libdir}/libckyapplet.so"
+          - "%{_libdir}/pkgconfig/libckyapplet.pc"
+          - "%{_includedir}/*.h"
